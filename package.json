@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/danlevine/rock-the-kanban/issues"
   },
-  "homepage": "https://github.com/danlevine/rock-the-kanban#readme"
+  "homepage": "https://github.com/danlevine/rock-the-kanban#readme",
+  "devDependencies": {
+    "webpack": "^1.12.14"
+  }
 }
