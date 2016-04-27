@@ -19772,6 +19772,39 @@
 	          notes: this.notes
 	        });
 	      }.bind(this));
+	      this.firebaseRef.on("child_changed", function (dataSnapshot) {
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+
+	        try {
+	          for (var _iterator = this.notes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var note = _step.value;
+
+	            if (note.id === dataSnapshot.key()) {
+	              note.task = dataSnapshot.val().task;
+	              break;
+	            }
+	          }
+	        } catch (err) {
+	          _didIteratorError = true;
+	          _iteratorError = err;
+	        } finally {
+	          try {
+	            if (!_iteratorNormalCompletion && _iterator.return) {
+	              _iterator.return();
+	            }
+	          } finally {
+	            if (_didIteratorError) {
+	              throw _iteratorError;
+	            }
+	          }
+	        }
+
+	        this.setState({
+	          notes: this.notes
+	        });
+	      }.bind(this));
 	    }
 	  }, {
 	    key: 'render',

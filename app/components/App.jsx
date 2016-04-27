@@ -28,6 +28,17 @@ export default class App extends React.Component {
         notes: this.notes
       });
     }.bind(this));
+    this.firebaseRef.on("child_changed", function(dataSnapshot) {
+      for (let note of this.notes) {
+        if (note.id === dataSnapshot.key()) {
+          note.task = dataSnapshot.val().task;
+          break;
+        }
+      }
+      this.setState({
+        notes: this.notes
+      });
+    }.bind(this));
   }
 
   render() {
