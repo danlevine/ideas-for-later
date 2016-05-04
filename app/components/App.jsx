@@ -1,4 +1,3 @@
-import uuid from 'node-uuid';
 import React from 'react';
 import Firebase from 'firebase';
 
