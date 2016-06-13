@@ -13,31 +13,67 @@ export default class App extends React.Component {
   }
 
   componentWillMount() {
-    this.firebaseRef.on("child_added", function(dataSnapshot) {
+    this.firebaseRef.on("child_added", (dataSnapshot) => {
       var currentNote = dataSnapshot.val();
       currentNote.id = dataSnapshot.key();
+      var oReq = new XMLHttpRequest();
+      oReq.addEventListener("load", (data) => { 
+
+        console.log(data.currentTarget.responseText);
+        var responseObj = JSON.parse(data.currentTarget.responseText);
+        currentNote.plot = responseObj.Plot;
+        currentNote.posterUrl = responseObj.Poster;
+        currentNote.ratingImdb = responseObj.imdbRating;
+
+        console.log(this.notes);
+        this.setState({
+          notes: this.notes
+        });
+        
+      });
+      oReq.open("GET", "http://www.omdbapi.com/?t=" + currentNote.task + "&y=&plot=short&r=json", true);
+      oReq.send();
       this.notes.push(currentNote);
       this.setState({
         notes: this.notes
       });
-    }.bind(this));
-    this.firebaseRef.on("child_removed", function(dataSnapshot) {
+    });
+    this.firebaseRef.on("child_removed", (dataSnapshot) => {
       this.notes = this.notes.filter(note => note.id != dataSnapshot.key());
       this.setState({
         notes: this.notes
       });
-    }.bind(this));
-    this.firebaseRef.on("child_changed", function(dataSnapshot) {
+    });
+    this.firebaseRef.on("child_changed", (dataSnapshot) => {
       for (let note of this.notes) {
         if (note.id === dataSnapshot.key()) {
           note.task = dataSnapshot.val().task;
+
+          var oReq = new XMLHttpRequest();
+          oReq.addEventListener("load", (data) => { 
+
+            console.log(data.currentTarget.responseText);
+            var responseObj = JSON.parse(data.currentTarget.responseText);
+            note.plot = responseObj.Plot;
+            note.posterUrl = responseObj.Poster;
+            note.ratingImdb = responseObj.imdbRating;
+
+            console.log(this.notes);
+            this.setState({
+              notes: this.notes
+            });
+            
+          });
+          oReq.open("GET", "http://www.omdbapi.com/?t=" + note.task + "&y=&plot=short&r=json", true);
+          oReq.send();
+
           break;
         }
       }
       this.setState({
         notes: this.notes
       });
-    }.bind(this));
+    });
   }
 
   render() {
